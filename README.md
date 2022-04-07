@@ -15,6 +15,7 @@ The Process to automate:
 - Mileage band requirements: the asset well phase must equal the well phase of the mileage band
 - Based on the mileage band and customer account, assign a unit rate
 - Upload all finished combinations into the TMSMileageBands table
+- Change flag of new assets, swds, and customer accounts to add them to the existing assets, swds, and customer accounts
 
 ## Process
 
@@ -49,30 +50,48 @@ The Process to automate:
 
 ![resources/newasset.PNG](resources/newasset.PNG)
 
-7. Generate Combinations of Bands
+### Generate Combinations of Bands
 
 ![resources/4.PNG](resources/4.PNG)
 
-9. Calculate Distances
+- Generate combinations of new records with the existing records
+- The districts must match (North and North or South and South) for Assets and SWDs
+
+### Calculate Distances
 
 ![resources/5.PNG](resources/5.PNG)
 
-11. Get Mileage Bands
-13. Assing Mileage Bands
+- Using the generated combinations, the distance between the SWD and Asset is calculated and rounded to the nearest whole number
+
+### Get Mileage Bands and Assign them to the combinations
 
 ![resources/6-7.PNG](resources/6-7.PNG)
 
-mileage band table
+- The mileage band table is gathered and reformatted
+- Requirements to assign mileageband: The well phase of the asset must match the well phase of the mileage band and the distance must fall inbetween a max and min of the mileage band
+
+#### mileage band table
+
 ![resources/mbtable.PNG](resources/mbtable.PNG)
 
-15. Get and Assign Unit Rate
+- This is the mileage band table that is being referenced
+
+### Get and Assign Unit Rate
 
 ![resources/8.PNG](resources/8.PNG)
 
-17. Export to TMSMileageBand table
+- The unit rates are gathered
+- The unit rate table is merged with the distance table based on the mileage band and the customer account
+- Records with null values are dropped
+
+### Export to TMSMileageBand table
 
 ![resources/9.PNG](resources/9.PNG)
 
-19. Change flags of new CA, Asset, and SWD to false
+- The completed records are uploaded to the TMSMileageBand Table
+
+### Change flags of new CA, Asset, and SWD to false
 
 ![resources/10.PNG](resources/10.PNG)
+
+- The AWS_MileageBands flag is changed so the next time the script is run, they will be recorded as existing records not new
